@@ -21,7 +21,7 @@ Usage
 ==========
 
 `pcap-workflow.sh` combines the analysis from a pcap trace to precisely formated
-logs in csv formats. The workflow aggerates following processing:
+logs in .csv format. The workflow aggerates following processing:
 
 |tcptrace on pcap| --> |tstat on pcap| --> |merge tcptrace and tstat outputs| -->
 
