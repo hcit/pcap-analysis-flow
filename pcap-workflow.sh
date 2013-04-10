@@ -9,7 +9,7 @@
 
 function printinfo(){
 	echo "Usage: $0 <inputpcap>"
-	echo "  pcapfile    The pcap file to be processed"
+	echo "  inputpcap    The pcap file to be processed"
 }
 
 function recordline(){
@@ -23,32 +23,6 @@ function removeold(){
 	rm -rf $1
 	echo "removing privious output..."
 }
-
-
-if [ $# -ne 1 ]; then
-	echo "parameters not match"
-	printinfo && exit 1;
-else
-	input=$1
-	if [ -z $input ]; then
-		echo "input file can't be empty"
-		printinfo && exit 1;
-	fi
-fi
-
-echo "Processing pcap file: $input"
-scripthome=`dirname $0`
-pcapbname=`basename $input`
-outfolder="output"
-mkdir $outfolder
-pcapbpath="$outfolder/$pcapbname"
-
-tcptrace_out="$pcapbpath.tt.out"
-tstat_out="$pcapbpath.ts.out"
-mergedtcp_out="$pcapbpath.tcp.out"
-justniffer_out="$pcapbpath.jn.out"
-ndpi_out="$pcapbpath.dpi.out"
-udp_out="$pcapbpath.tt.udp"
 
 function run_tcptrace(){
 	echo -e "\n\n"
@@ -110,14 +84,6 @@ function run_format_logs() {
 	echo "Done!"
 }
 
-# Work flow
-run_tcptrace
-run_tstat
-run_merge_tcptrace_tstat
-run_pcapDPI
-run_justniffer
-run_format_logs
-
 function clear_all(){
 	rm -rf $outfolder/*.tcp.tmp
 	rm -rf $outfolder/*.udp.tmp
@@ -128,8 +94,50 @@ function clear_all(){
 	#rm -rf $outfolder/*.dpi.out
 }
 
-# clear all unused files
-clear_all
+## Parse options
+if [ $# -lt 1 ]; then
+	echo "At least one pcap given"
+	printinfo && exit 1;
+else
+	input=$1
+	if [ -z $input ]; then
+		echo "Input file must be specified"
+		printinfo && exit 1;
+	fi
+fi
+
+## Process pcap file
+scripthome=`dirname $0`
+outfolder="output"
+mkdir $outfolder
+for i in $@
+do
+	echo "Processing pcap file: $i"
+	pcapbname=`basename $i`
+	pcapbpath="$outfolder/$pcapbname"
+
+	tcptrace_out="$pcapbpath.tt.out"
+	tstat_out="$pcapbpath.ts.out"
+	mergedtcp_out="$pcapbpath.tcp.out"
+	justniffer_out="$pcapbpath.jn.out"
+	ndpi_out="$pcapbpath.dpi.out"
+	udp_out="$pcapbpath.tt.udp"
+
+	# Work flow
+	run_tcptrace
+	run_tstat
+	run_merge_tcptrace_tstat
+
+	run_pcapDPI
+
+	run_justniffer
+	
+	run_format_logs
+
+	# clear all unused files
+	clear_all
+
+done
 
 echo -e "\n\nALL DONE!"
 
