@@ -34,7 +34,7 @@ scripthome=`dirname $0`
 netconf="$scripthome/tstat.netconf"
 rrdconf="$scripthome/tstat.rrdconf"
 
-tstat -tSL -N $netconf -R $rrdconf -r $subfolder $pcapfile
+tstat -tdSL -N $netconf -R $rrdconf -r $subfolder $pcapfile
 
 echo -e "\nDONE!"
 
