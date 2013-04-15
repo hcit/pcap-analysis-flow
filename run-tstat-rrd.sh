@@ -22,7 +22,7 @@ else
 	fi
 
 	if [ -d $subfolder ]; then
-		rm -rf $subfolder/*
+		echo "$subfolder already exists. The data will be updated..."
 	else
 		echo "$subfolder does not exist. We will make it for you..."
 		mkdir -p $subfolder
