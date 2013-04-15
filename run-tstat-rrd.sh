@@ -21,7 +21,9 @@ else
 		printinfo && exit 1;
 	fi
 
-	if [ !-d $subfolder ]; then
+	if [ -d $subfolder ]; then
+		rm -rf $subfolder/*
+	else
 		echo "$subfolder does not exist. We will make it for you..."
 		mkdir -p $subfolder
 	fi
