@@ -39,6 +39,6 @@ fi
 
 # Run justniffer
 script_home=`dirname $0`
-justniffer -f $input -F -c $script_home/justniffer-v1.1.conf -e "$script_home/justniffer-rpp-processor.sh $outputfile"
+justniffer -f $input -F -c $script_home/justniffer-v1.1.conf > $outputfile
 
 exit 0;
