@@ -12,13 +12,6 @@ function printinfo(){
 	echo "  inputpcap    The pcap file to be processed"
 }
 
-function recordline(){
-	while read line;
-	do
-	  echo $line >> $1
-	done
-}
-
 function removeold(){
 	rm -rf $1
 	echo "removing privious output..."
@@ -31,8 +24,7 @@ function run_tcptrace(){
 	echo "**********************************"
 	echo "  Non-complete flows: no"
 	echo "  UDP analysis: yes"
-	removeold $tcptrace_out
-	tcptrace -cnul --csv $input | recordline $tcptrace_out
+	tcptrace -cnul --csv $input > $tcptrace_out
 	echo "Done!"
 }
 
