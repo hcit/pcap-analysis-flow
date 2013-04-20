@@ -14,13 +14,21 @@ tstatpid="/var/run/mypid-tstat"
 dpipid="/var/run/mypid-dpi"
 datetime=`date '+%Y%m%d-%H%M%S'`
 
-justniffer -i eth1 -F -c $scripthome/justniffer/justniffer-light.conf > wifi_justniffer_$datetime &
+## Parse options
+if [ $# -ne 1 ]; then
+        echo "Usage: $0 <outputfolder>" && exit 1;
+else
+        outfolder=$1
+        mkdir -p $outfolder
+fi
+
+justniffer -i eth1 -F -c $scripthome/justniffer/justniffer-light.conf > $outfolder/wifi_justniffer_$datetime &
 echo $! > $justpid
 
-tstat -i eth1 -l -N $scripthome/tstat.netconf -s wifi_tstat_$datetime &
+tstat -i eth1 -l -N $scripthome/tstat.netconf -s $outfolder/wifi_tstat_$datetime &
 echo $! > $tstatpid
 
-#$scripthome/pcapDPI/pcapReader -i eth1 -w wifi_dpi_$datetime &
+#$scripthome/pcapDPI/pcapReader -i eth1 -w $outfolder/wifi_dpi_$datetime &
 #echo $! > $dpipid
 
 sleep 12h & pid=$!
