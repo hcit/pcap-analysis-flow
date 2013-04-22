@@ -35,7 +35,7 @@ mkdir -p $outfolder/wifilog_ndpi
 $scripthome/pcapDPI/pcapReader -i eth1 -w $outfolder/wifilog_ndpi/$datetime.dpi.out &
 echo $! > $dpipid
 
-sleep 10s && kill_processes & pid=$!
+sleep 59m && kill_processes & pid=$!
 wait
 
 exit 0;
