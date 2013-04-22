@@ -1,7 +1,10 @@
 #!/bin/bash
+pid=
+trap '[[ $pid ]] && echo "killing timer..." && kill $pid && kill_processes' 1 2 3 6 9 15
 export PATH=/usr/loca/bin:/usr/bin:/bin:$PATH
 
 kill_processes(){
+	echo "killing children processes..."
         kill -9 `cat $justpid`
         kill -2 `cat $tstatpid`
         kill -2 `cat $dpipid`
@@ -32,11 +35,7 @@ mkdir -p $outfolder/wifilog_ndpi
 $scripthome/pcapDPI/pcapReader -i eth1 -w $outfolder/wifilog_ndpi/$datetime.dpi.out &
 echo $! > $dpipid
 
-pid=
-trap '[[ $pid ]] && kill $pid && kill_processes' 1 2 3 6 9 15
-sleep 58m & pid=$!
+sleep 10s && kill_processes & pid=$!
 wait
-
-kill_processes
 
 exit 0;
